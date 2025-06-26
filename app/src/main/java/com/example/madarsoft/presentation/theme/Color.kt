@@ -1,4 +1,4 @@
-package com.example.madarsoft.ui.theme
+package com.example.madarsoft.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

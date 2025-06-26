@@ -1,4 +1,4 @@
-package com.example.madarsoft.ui.theme
+package com.example.madarsoft.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
