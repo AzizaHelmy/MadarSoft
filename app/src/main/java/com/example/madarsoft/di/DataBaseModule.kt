@@ -6,6 +6,7 @@ import com.example.madarsoft.data.source.local.MadarRoomClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -18,7 +19,7 @@ object DataBaseModule {
 
     @Provides
     @Singleton
-    fun provideMadarDataBase(context: Context): MadarDataBase = MadarRoomClient.create(context)
+    fun provideMadarDataBase(@ApplicationContext context: Context): MadarDataBase = MadarRoomClient.create(context)
 
     @Provides
     @Singleton
