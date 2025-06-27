@@ -6,8 +6,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.madarsoft.presentation.theme.Blue
 
 /**
  * Created by Aziza Helmy on 26/06/2025.
@@ -36,43 +43,82 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-    HomeContent(uiState = state.user, onNameChanged =viewModel::onNameChanged)
+    HomeContent(
+        uiState = state.user,
+        onNameChanged = viewModel::onNameChanged,
+        onTitleChanged = viewModel::onTitleChanged,
+        onAgeChanged = viewModel::onAgeChanged,
+        onJobChanged = viewModel::onJobChanged,
+        onAddClicked = viewModel::addUser
+    )
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeContent(uiState: UserUiState, onNameChanged: (String) -> Unit = {}) {
+fun HomeContent(
+    uiState: UserUiState,
+    onNameChanged: (String) -> Unit = {},
+    onTitleChanged: (String) -> Unit = {},
+    onAgeChanged: (String) -> Unit = {},
+    onJobChanged: (String) -> Unit = {},
+    onGenderChanged: (String) -> Unit = {},
+    onAddClicked: (UserUiState) -> Unit = {}
+) {
     Scaffold(topBar = {
         TopAppBar(
-            title = { Text(text = "Add User") },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Cyan)
+            title = { Text(text = "Add User", color = Color.White) },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Blue)
         )
     }) { paddingValues ->
         Box(
             modifier = Modifier
                 .padding(paddingValues)
-                .background(Color.Gray)
+                .background(Color.White)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 AppTextField(
                     modifier = Modifier.padding(top = 16.dp),
                     text = uiState.name,
                     hint = "Name",
-                    onValueChange = onNameChanged)
-                AppTextField(text = uiState.name, hint = "Title", onValueChange = { })
-                AppTextField(text = uiState.name, hint = "Age", onValueChange = { })
-                AppTextField(text = uiState.name, hint = "Job", onValueChange = { })
+                    onValueChange = onNameChanged
+                )
+                AppTextField(text = uiState.title, hint = "Title", onValueChange = onTitleChanged)
                 AppTextField(
-                    text = uiState.name,
+                    text = uiState.age.toString(),
+                    hint = "Age",
+                    onValueChange = onAgeChanged
+                )
+                AppTextField(text = uiState.job, hint = "Job", onValueChange = onJobChanged)
+                AppTextField(
+                    text = uiState.gender,
                     hint = "gender",
-                    onValueChange = { })
+                    onValueChange = onGenderChanged
+                )
+                Button(
+                    onClick = { onAddClicked },
+                    enabled = uiState.isValidData,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(size = 16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Blue,
+                        contentColor = Color.White,
+                        disabledContainerColor = Color.LightGray,
+                        disabledContentColor = Color.Gray
+                    )
+                ) {
+                    Text(text = "Add")
+                }
             }
+
         }
 
     }
@@ -87,7 +133,7 @@ fun AppTextField(
     onValueChange: (String) -> Unit,
     keyboardType: KeyboardType = KeyboardType.Text,
 ) {
-    val containerColor = Color.White
+    val containerColor = Color.Transparent
     val borderColor = Color.Gray
     val textColor = Color.Black
     val errorColor = Color.Red
@@ -124,7 +170,7 @@ fun AppTextField(
             focusedTextColor = textColor,
             unfocusedTextColor = textColor,
         ),
-        placeholder = {
+        label = {
             if (hint.isNotEmpty()) {
                 Text(
                     text = hint,

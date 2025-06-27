@@ -24,7 +24,7 @@ class HomeViewModel @Inject constructor(val repo: MadarRepository) : ViewModel()
     }
 
 
-    fun onAgeChanged(age: Int) {
+    fun onAgeChanged(age: String) {
         _state.update { it.copy(user = it.user.copy(age = age)) }
     }
 

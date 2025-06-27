@@ -14,11 +14,12 @@ data class HomeUiState(
 data class UserUiState(
     val id: Long = 0,
     val name: String = "",
-    val age: Int = 0,
+    val age: String = "",
     val title: String = "",
     val job: String = "",
-    val gender: String = ""
+    val gender: String = "",
+    val isValidData: Boolean = false
 )
 
 fun UserUiState.toUser() =
-    User(id = id, name = name, age = age, title = title, job = job, gender = gender)
+    User(id = id, name = name, age = age.toInt(), title = title, job = job, gender = gender)
