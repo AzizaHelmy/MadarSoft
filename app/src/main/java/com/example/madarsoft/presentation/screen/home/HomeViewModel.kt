@@ -1,5 +1,6 @@
 package com.example.madarsoft.presentation.screen.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.madarsoft.domain.repo.MadarRepository
@@ -35,11 +36,15 @@ class HomeViewModel @Inject constructor(val repo: MadarRepository) : ViewModel()
     fun onJobChanged(job: String) {
         _state.update { it.copy(user = it.user.copy(job = job)) }
     }
+    fun onGenderChanged(gender: String) {
+        _state.update { it.copy(user = it.user.copy(gender = gender)) }
+    }
 
     fun addUser(user: UserUiState) {
         try {
             _state.update { it.copy(isLoading = true) }
             viewModelScope.launch {
+                Log.e("TAG", "addUser:$user ", )
                 repo.addUser(user.toUser())
             }
         } catch (_: Exception) {

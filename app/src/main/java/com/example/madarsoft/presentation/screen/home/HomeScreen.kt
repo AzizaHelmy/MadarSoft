@@ -49,6 +49,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         onTitleChanged = viewModel::onTitleChanged,
         onAgeChanged = viewModel::onAgeChanged,
         onJobChanged = viewModel::onJobChanged,
+        onGenderChanged = viewModel::onGenderChanged,
         onAddClicked = viewModel::addUser
     )
 
@@ -93,16 +94,16 @@ fun HomeContent(
                 AppTextField(
                     text = uiState.age.toString(),
                     hint = "Age",
-                    onValueChange = onAgeChanged
-                )
+                    keyboardType = KeyboardType.Number,
+                    onValueChange = {
+                        onAgeChanged(it.filter { char -> char.isDigit() })
+                    })
                 AppTextField(text = uiState.job, hint = "Job", onValueChange = onJobChanged)
                 AppTextField(
-                    text = uiState.gender,
-                    hint = "gender",
-                    onValueChange = onGenderChanged
+                    text = uiState.gender, hint = "gender", onValueChange = onGenderChanged
                 )
                 Button(
-                    onClick = { onAddClicked },
+                    onClick = { onAddClicked(uiState) },
                     enabled = uiState.isValidData,
                     modifier = Modifier
                         .fillMaxWidth()
