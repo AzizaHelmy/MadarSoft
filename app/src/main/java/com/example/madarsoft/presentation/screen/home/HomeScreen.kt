@@ -33,6 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.madarsoft.presentation.navigation.Destination
+import com.example.madarsoft.presentation.navigation.localNavController
 import com.example.madarsoft.presentation.theme.Blue
 
 /**
@@ -41,6 +43,7 @@ import com.example.madarsoft.presentation.theme.Blue
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+    val navController = localNavController.current
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     HomeContent(
@@ -50,9 +53,11 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         onAgeChanged = viewModel::onAgeChanged,
         onJobChanged = viewModel::onJobChanged,
         onGenderChanged = viewModel::onGenderChanged,
-        onAddClicked = viewModel::addUser
+        onAddClicked = {
+            viewModel::addUser
+            navController.navigate(Destination.Details)
+        }
     )
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -5,7 +5,7 @@ package com.example.madarsoft.domain.enitiy
  */
 
 data class User(
-    val id: Long,
+    val id: Long = 0L,
     val name: String,
     val age: Int,
     val title: String,

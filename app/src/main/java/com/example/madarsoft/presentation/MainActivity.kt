@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.madarsoft.presentation.screen.home.HomeScreen
+import com.example.madarsoft.presentation.navigation.NavGraph
 import com.example.madarsoft.presentation.theme.MadarSoftTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MadarSoftTheme {
-                HomeScreen()
+                NavGraph()
             }
         }
     }
