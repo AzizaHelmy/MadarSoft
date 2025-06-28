@@ -15,7 +15,8 @@ interface MadarDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUser(user: UserEntity)
 
-    @Query("select * from users")
-    suspend fun getUser(): UserEntity
+    @Query("SELECT * FROM users ORDER BY id DESC LIMIT 1")
+    suspend fun getUser(): UserEntity?
+
 
 }

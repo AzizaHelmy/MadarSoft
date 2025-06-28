@@ -1,5 +1,6 @@
 package com.example.madarsoft.presentation.screen.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,26 +9,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,6 +35,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.madarsoft.presentation.navigation.Destination
 import com.example.madarsoft.presentation.navigation.localNavController
+import com.example.madarsoft.presentation.screen.component.AppTextField
+import com.example.madarsoft.presentation.screen.component.Gender
+import com.example.madarsoft.presentation.screen.component.GenderDropDown
 import com.example.madarsoft.presentation.theme.Blue
 
 /**
@@ -46,17 +49,34 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     val navController = localNavController.current
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(state.isSuccess) {
+        if (state.isSuccess) {
+            navController.navigate(Destination.Details)
+        }
+    }
+    if (state.showDialog) {
+        AlertDialog(
+            onDismissRequest = { viewModel.dismissDialog() },
+            title = { Text("Error") },
+            text = { Text(state.error) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.dismissDialog() }) {
+                    Text("OK")
+                }
+            }
+        )
+    }
+
     HomeContent(
         uiState = state.user,
+        isLoading = state.isLoading,
         onNameChanged = viewModel::onNameChanged,
         onTitleChanged = viewModel::onTitleChanged,
         onAgeChanged = viewModel::onAgeChanged,
         onJobChanged = viewModel::onJobChanged,
         onGenderChanged = viewModel::onGenderChanged,
-        onAddClicked = {
-            viewModel::addUser
-            navController.navigate(Destination.Details)
-        }
+        onAddClicked = viewModel::addUser
     )
 }
 
@@ -64,11 +84,12 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 @Composable
 fun HomeContent(
     uiState: UserUiState,
+    isLoading: Boolean = false,
     onNameChanged: (String) -> Unit = {},
     onTitleChanged: (String) -> Unit = {},
     onAgeChanged: (String) -> Unit = {},
     onJobChanged: (String) -> Unit = {},
-    onGenderChanged: (String) -> Unit = {},
+    onGenderChanged: (Gender) -> Unit = {},
     onAddClicked: (UserUiState) -> Unit = {}
 ) {
     Scaffold(topBar = {
@@ -82,6 +103,7 @@ fun HomeContent(
                 .padding(paddingValues)
                 .background(Color.White)
         ) {
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -104,12 +126,18 @@ fun HomeContent(
                         onAgeChanged(it.filter { char -> char.isDigit() })
                     })
                 AppTextField(text = uiState.job, hint = "Job", onValueChange = onJobChanged)
-                AppTextField(
-                    text = uiState.gender, hint = "gender", onValueChange = onGenderChanged
+                GenderDropDown(
+                    selectedGender = uiState.gender,
+                    onGenderSelected = onGenderChanged
                 )
+
+
                 Button(
-                    onClick = { onAddClicked(uiState) },
-                    enabled = uiState.isValidData,
+                    onClick = {
+                        onAddClicked(uiState)
+                        Log.e("TAG", "HomeContent:$uiState ")
+                    },
+                    enabled = uiState.isValidData && !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
@@ -121,71 +149,20 @@ fun HomeContent(
                         disabledContentColor = Color.Gray
                     )
                 ) {
-                    Text(text = "Add")
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            color = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    } else {
+                        Text(text = "Add")
+                    }
                 }
             }
 
         }
 
     }
-}
-
-@Composable
-fun AppTextField(
-    text: String,
-    hint: String,
-    modifier: Modifier = Modifier,
-    leadingIcon: Painter? = null,
-    onValueChange: (String) -> Unit,
-    keyboardType: KeyboardType = KeyboardType.Text,
-) {
-    val containerColor = Color.Transparent
-    val borderColor = Color.Gray
-    val textColor = Color.Black
-    val errorColor = Color.Red
-
-    OutlinedTextField(
-        value = text.trim(),
-        onValueChange = onValueChange,
-        modifier = modifier.fillMaxWidth(),
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        singleLine = true,
-        leadingIcon = leadingIcon?.let {
-            {
-                Icon(
-                    painter = it,
-                    contentDescription = null,
-                )
-            }
-        },
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = containerColor,
-            unfocusedContainerColor = containerColor,
-            disabledContainerColor = containerColor,
-
-            focusedIndicatorColor = borderColor,
-            unfocusedIndicatorColor = borderColor,
-            disabledIndicatorColor = borderColor,
-
-            errorIndicatorColor = errorColor,
-            errorCursorColor = errorColor,
-            errorTextColor = errorColor,
-
-            cursorColor = textColor,
-            disabledTextColor = textColor,
-            focusedTextColor = textColor,
-            unfocusedTextColor = textColor,
-        ),
-        label = {
-            if (hint.isNotEmpty()) {
-                Text(
-                    text = hint,
-                    color = Color.Gray,
-                )
-            }
-        },
-        shape = MaterialTheme.shapes.small
-    )
 }
 
 @Composable

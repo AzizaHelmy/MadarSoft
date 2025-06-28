@@ -1,5 +1,6 @@
 package com.example.madarsoft.data.repo
 
+import android.util.Log
 import com.example.madarsoft.data.mapper.toEntity
 import com.example.madarsoft.data.mapper.toUser
 import com.example.madarsoft.data.source.local.MadarDao
@@ -16,16 +17,18 @@ class MadarRepositoryImp @Inject constructor(val localDataSource: MadarDao) : Ma
     override suspend fun addUser(user: User) {
         try {
             localDataSource.addUser(user.toEntity())
+            Log.e("TAG", "addUser: ${localDataSource.addUser(user.toEntity())}", )
         } catch (e: Exception) {
-            throw Exception("Failed to add user")
+            throw Exception(e.message)
         }
     }
 
     override suspend fun getUser(): User {
         try {
-            return localDataSource.getUser().toUser()
+            val user = localDataSource.getUser()
+            return user?.toUser() ?: throw Exception("No user found")
         } catch (e: Exception) {
-            throw Exception("Failed to get user")
+            throw Exception(e.message)
         }
     }
 }

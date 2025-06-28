@@ -3,6 +3,7 @@ package com.example.madarsoft.presentation.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.madarsoft.domain.repo.MadarRepository
+import com.example.madarsoft.presentation.screen.component.Gender
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,8 +36,13 @@ class HomeViewModel @Inject constructor(val repo: MadarRepository) : ViewModel()
     fun onJobChanged(job: String) {
         _state.update { it.copy(user = it.user.copy(job = job)) }
     }
-    fun onGenderChanged(gender: String) {
+
+    fun onGenderChanged(gender: Gender) {
         _state.update { it.copy(user = it.user.copy(gender = gender)) }
+    }
+
+    fun dismissDialog() {
+        _state.update { it.copy(showDialog = false) }
     }
 
     fun addUser(user: UserUiState) {
@@ -44,9 +50,10 @@ class HomeViewModel @Inject constructor(val repo: MadarRepository) : ViewModel()
             _state.update { it.copy(isLoading = true) }
             viewModelScope.launch {
                 repo.addUser(user.toUser())
+                _state.update { it.copy(isLoading = false, isSuccess = true) }
             }
         } catch (_: Exception) {
-            _state.update { it.copy(error = "Failed to add user") }
+            _state.update { it.copy(error = "Failed to add user", showDialog = true) }
         }
     }
 }
