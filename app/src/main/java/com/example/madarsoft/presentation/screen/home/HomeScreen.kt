@@ -53,8 +53,10 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
             navController.navigate(Destination.Details)
+            viewModel.resetSuccessState()
         }
     }
+    
     if (state.showDialog) {
         AlertDialog(
             onDismissRequest = { viewModel.dismissDialog() },

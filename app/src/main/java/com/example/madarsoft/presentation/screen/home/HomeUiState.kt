@@ -11,8 +11,7 @@ data class HomeUiState(
     val isSuccess: Boolean = false,
     val isLoading: Boolean = false,
     val error: String = "",
-    val showDialog: Boolean = false
-
+    val showDialog: Boolean = false,
 )
 
 data class UserUiState(

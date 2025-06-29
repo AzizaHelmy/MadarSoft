@@ -11,10 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.madarsoft.presentation.navigation.localNavController
 import com.example.madarsoft.presentation.theme.Blue
 
 /**
@@ -46,10 +51,21 @@ fun DetailsScreen(viewModel: DetailsViewModel = hiltViewModel()) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsContent(uiState: UserUiState) {
+    val navController = localNavController.current
+    
     Scaffold(topBar = {
         TopAppBar(
             title = { Text(text = "User Details", color = Color.White) },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Blue)
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Blue),
+            navigationIcon = {
+                IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
+            }
         )
     }) { paddingValues ->
         Box(

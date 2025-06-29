@@ -24,7 +24,6 @@ class HomeViewModel @Inject constructor(val repo: MadarRepository) : ViewModel()
         _state.update { it.copy(user = it.user.copy(name = newName)) }
     }
 
-
     fun onAgeChanged(age: String) {
         _state.update { it.copy(user = it.user.copy(age = age)) }
     }
@@ -43,6 +42,10 @@ class HomeViewModel @Inject constructor(val repo: MadarRepository) : ViewModel()
 
     fun dismissDialog() {
         _state.update { it.copy(showDialog = false) }
+    }
+
+    fun resetSuccessState() {
+        _state.update { it.copy(isSuccess = false) }
     }
 
     fun addUser(user: UserUiState) {
