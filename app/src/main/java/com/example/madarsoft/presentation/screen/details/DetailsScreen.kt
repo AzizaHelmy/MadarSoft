@@ -100,7 +100,7 @@ fun DetailsContent(uiState: UserUiState) {
 }
 
 @Composable
-fun UserInfoRow(label: String, value: String) {
+private fun UserInfoRow(label: String, value: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

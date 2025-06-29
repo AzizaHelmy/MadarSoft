@@ -2,7 +2,7 @@ package com.example.madarsoft.presentation.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.madarsoft.domain.repo.MadarRepository
+import com.example.madarsoft.domain.usecase.AddUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
  * Created by Aziza Helmy on 26/06/2025.
  */
 @HiltViewModel
-class HomeViewModel @Inject constructor(val repo: MadarRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(val addUserUseCase: AddUserUseCase) : ViewModel() {
 
     private val _state = MutableStateFlow<HomeUiState>(HomeUiState())
     val state = _state.asStateFlow()
@@ -51,7 +51,7 @@ class HomeViewModel @Inject constructor(val repo: MadarRepository) : ViewModel()
         try {
             _state.update { it.copy(isLoading = true) }
             viewModelScope.launch {
-                repo.addUser(user.toUser())
+                addUserUseCase.invoke(user.toUser())
                 _state.update { it.copy(isLoading = false, isSuccess = true) }
             }
         } catch (_: Exception) {
