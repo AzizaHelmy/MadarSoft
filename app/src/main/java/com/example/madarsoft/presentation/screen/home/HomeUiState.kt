@@ -1,7 +1,6 @@
 package com.example.madarsoft.presentation.screen.home
 
 import com.example.madarsoft.domain.enitiy.User
-import com.example.madarsoft.presentation.screen.component.Gender
 
 /**
  * Created by Aziza Helmy on 27/06/2025.

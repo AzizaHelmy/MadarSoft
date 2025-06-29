@@ -1,5 +1,6 @@
 package com.example.madarsoft.presentation.screen.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenuItem
@@ -25,13 +26,16 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GenderDropDown(
-    selectedGender: Gender?,
-    onGenderSelected: (Gender) -> Unit,
-    modifier: Modifier = Modifier
+fun <T> AppDropDown(
+    items: List<T>,
+    selectedItem: T?,
+    onItemSelected: (T) -> Unit,
+    modifier: Modifier = Modifier,
+    label: String,
+    placeholder: String = "Select",
+    itemTextProvider: (T) -> String
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val genderOptions = Gender.entries.toTypedArray()
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -39,32 +43,36 @@ fun GenderDropDown(
         modifier = modifier
     ) {
         OutlinedTextField(
-            value = selectedGender?.displayName ?: "",
+            value = selectedItem?.let(itemTextProvider) ?: "",
             onValueChange = {},
             readOnly = true,
-            label = { Text("Gender") },
-            placeholder = { Text("Select gender") },
+            label = { Text(text = label, color = Color.Gray) },
+            placeholder = { Text(placeholder) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             modifier = Modifier
-                .menuAnchor().fillMaxWidth()
+                .menuAnchor()
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp)),
             shape = RoundedCornerShape(8.dp),
             singleLine = true,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent
+                unfocusedContainerColor = Color.Transparent,
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
             ),
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.background(Color.White)
         ) {
-            genderOptions.forEach { gender ->
+            items.forEach { item ->
                 DropdownMenuItem(
-                    text = { Text(gender.displayName) },
+                    text = { Text(text = itemTextProvider(item), color = Color.Black) },
                     onClick = {
-                        onGenderSelected(gender)
+                        onItemSelected(item)
                         expanded = false
                     }
                 )
@@ -73,15 +81,5 @@ fun GenderDropDown(
     }
 }
 
-enum class Gender(val displayName: String) {
-    Male("Male"),
-    Female("Female");
-
-    companion object {
-        fun fromDisplayName(name: String): Gender {
-            return values().firstOrNull { it.displayName == name } ?: Male
-        }
-    }
-}
 
 

@@ -1,8 +1,6 @@
 package com.example.madarsoft.presentation.screen.details
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,19 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -35,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.madarsoft.R
 import com.example.madarsoft.presentation.navigation.localNavController
-import com.example.madarsoft.presentation.theme.Blue
+import com.example.madarsoft.presentation.screen.component.AppScaffold
 
 /**
  * Created by Aziza Helmy on 26/06/2025.
@@ -54,70 +45,54 @@ fun DetailsScreen(viewModel: DetailsViewModel = hiltViewModel()) {
 fun DetailsContent(uiState: UserUiState) {
     val navController = localNavController.current
 
-    Scaffold(topBar = {
-        TopAppBar(
-            title = { Text(text = stringResource(R.string.user_details), color = Color.White) },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Blue),
-            navigationIcon = {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back",
-                        tint = Color.White
-                    )
-                }
-            }
-        )
-    }) { paddingValues ->
-        Box(
+    AppScaffold(
+        title = stringResource(R.string.user_details),
+        onBack = { navController.navigateUp() },
+        containerColor = Color(0xFFF8F8F8)
+    ) {
+        Column(
             modifier = Modifier
-                .padding(paddingValues)
-                .background(Color(0xFFF8F8F8))
+                .fillMaxSize()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(2.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(2.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        UserInfoRow(
-                            label = "${stringResource(R.string.name)}:",
-                            value = uiState.name
-                        )
-                        HorizontalDivider(
-                            modifier = Modifier.padding(vertical = 2.dp),
-                            color = Color.LightGray
-                        )
-                        UserInfoRow(
-                            label = "${stringResource(R.string.title)}:",
-                            value = uiState.title
-                        )
-                        HorizontalDivider(
-                            modifier = Modifier.padding(vertical = 2.dp),
-                            color = Color.LightGray
-                        )
-                        UserInfoRow(label = "${stringResource(R.string.age)}:", value = uiState.age)
-                        HorizontalDivider(
-                            modifier = Modifier.padding(vertical = 2.dp),
-                            color = Color.LightGray
-                        )
-                        UserInfoRow(label = "${stringResource(R.string.job)}:", value = uiState.job)
-                        HorizontalDivider(
-                            modifier = Modifier.padding(vertical = 2.dp),
-                            color = Color.LightGray
-                        )
-                        UserInfoRow(label = stringResource(R.string.gender), value = uiState.gender)
-                    }
+                    UserInfoRow(
+                        label = "${stringResource(R.string.name)}:",
+                        value = uiState.name
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 2.dp),
+                        color = Color.LightGray
+                    )
+                    UserInfoRow(
+                        label = "${stringResource(R.string.title)}:",
+                        value = uiState.title
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 2.dp),
+                        color = Color.LightGray
+                    )
+                    UserInfoRow(label = "${stringResource(R.string.age)}:", value = uiState.age)
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 2.dp),
+                        color = Color.LightGray
+                    )
+                    UserInfoRow(label = "${stringResource(R.string.job)}:", value = uiState.job)
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 2.dp),
+                        color = Color.LightGray
+                    )
+                    UserInfoRow(label = stringResource(R.string.gender), value = uiState.gender)
                 }
             }
         }

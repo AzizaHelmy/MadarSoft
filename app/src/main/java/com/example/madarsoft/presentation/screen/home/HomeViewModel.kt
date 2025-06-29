@@ -3,7 +3,6 @@ package com.example.madarsoft.presentation.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.madarsoft.domain.repo.MadarRepository
-import com.example.madarsoft.presentation.screen.component.Gender
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

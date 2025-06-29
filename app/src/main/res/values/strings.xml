@@ -8,6 +8,6 @@
     <string name="job">Job</string>
     <string name="add">Add</string>
     <string name="user_details">User Details</string>
-    <string name="name">Name:</string>
+    <string name="name">Name</string>
     <string name="gender">Gender:</string>
 </resources>
