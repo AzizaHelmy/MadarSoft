@@ -7,6 +7,7 @@ Simple App for User data
 - [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)
 - [Coroutines](https://developer.android.com/kotlin/coroutines)
 - [Room](https://developer.android.com/jetpack/androidx/releases/room)
+- [Navigation-Type safety](https://developer.android.com/guide/navigation/design/type-safety)
 
 
 ## Architecture 
