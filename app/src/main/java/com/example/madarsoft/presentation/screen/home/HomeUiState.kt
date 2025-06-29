@@ -34,7 +34,7 @@ data class UserUiState(
 fun UserUiState.toUser() =
     User(
         id = id,
-        name = name,
+        name = name.trim(),
         age = age.toInt(),
         title = title,
         job = job,

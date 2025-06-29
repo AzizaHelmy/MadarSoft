@@ -136,6 +136,7 @@ fun HomeContent(
                 enabled = uiState.isValidData && !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(top = 24.dp)
                     .height(56.dp),
                 shape = RoundedCornerShape(size = 16.dp),
                 colors = ButtonDefaults.buttonColors(

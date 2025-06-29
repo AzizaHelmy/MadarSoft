@@ -34,7 +34,7 @@ fun AppTextField(
     val errorColor = Color.Red
 
     OutlinedTextField(
-        value = text.trim(),
+        value = text,
         onValueChange = { newValue ->
             if (keyboardType == KeyboardType.Number) {
                 val filtered = newValue.filter { it.isDigit() }
