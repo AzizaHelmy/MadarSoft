@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.madarsoft.presentation.theme.Blue
 
 /**
  * Created by Aziza Helmy on 28/06/2025.
@@ -60,6 +61,8 @@ fun <T> AppDropDown(
                 unfocusedContainerColor = Color.Transparent,
                 focusedTextColor = Color.Black,
                 unfocusedTextColor = Color.Black,
+                focusedIndicatorColor = Blue,
+
             ),
         )
 

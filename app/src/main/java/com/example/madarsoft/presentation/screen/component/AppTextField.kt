@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.KeyboardType
+import com.example.madarsoft.presentation.theme.Blue
 
 /**
  * Created by Aziza Helmy on 28/06/2025.
@@ -66,7 +67,7 @@ fun AppTextField(
             unfocusedContainerColor = containerColor,
             disabledContainerColor = containerColor,
 
-            focusedIndicatorColor = borderColor,
+            focusedIndicatorColor = Blue,
             unfocusedIndicatorColor = borderColor,
             disabledIndicatorColor = borderColor,
 
