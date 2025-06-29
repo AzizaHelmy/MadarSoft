@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">MadarSoft</string>
+    <string name="error">Error</string>
+    <string name="ok">OK</string>
+    <string name="add_user">Add User</string>
+    <string name="title">Title</string>
+    <string name="age">Age</string>
+    <string name="job">Job</string>
+    <string name="add">Add</string>
+    <string name="user_details">User Details</string>
+    <string name="name">Name:</string>
+    <string name="gender">Gender:</string>
 </resources>

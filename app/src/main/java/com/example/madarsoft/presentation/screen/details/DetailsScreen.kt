@@ -28,10 +28,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.madarsoft.R
 import com.example.madarsoft.presentation.navigation.localNavController
 import com.example.madarsoft.presentation.theme.Blue
 
@@ -45,17 +47,16 @@ fun DetailsScreen(viewModel: DetailsViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DetailsContent(uiState = state.user)
 
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsContent(uiState: UserUiState) {
     val navController = localNavController.current
-    
+
     Scaffold(topBar = {
         TopAppBar(
-            title = { Text(text = "User Details", color = Color.White) },
+            title = { Text(text = stringResource(R.string.user_details), color = Color.White) },
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Blue),
             navigationIcon = {
                 IconButton(onClick = { navController.navigateUp() }) {
@@ -89,27 +90,33 @@ fun DetailsContent(uiState: UserUiState) {
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        UserInfoRow(label = "Name:", value = uiState.name)
+                        UserInfoRow(
+                            label = "${stringResource(R.string.name)}:",
+                            value = uiState.name
+                        )
                         HorizontalDivider(
                             modifier = Modifier.padding(vertical = 2.dp),
                             color = Color.LightGray
                         )
-                        UserInfoRow(label = "Title:", value = uiState.title)
+                        UserInfoRow(
+                            label = "${stringResource(R.string.title)}:",
+                            value = uiState.title
+                        )
                         HorizontalDivider(
                             modifier = Modifier.padding(vertical = 2.dp),
                             color = Color.LightGray
                         )
-                        UserInfoRow(label = "Age:", value = uiState.age)
+                        UserInfoRow(label = "${stringResource(R.string.age)}:", value = uiState.age)
                         HorizontalDivider(
                             modifier = Modifier.padding(vertical = 2.dp),
                             color = Color.LightGray
                         )
-                        UserInfoRow(label = "Job:", value = uiState.job)
+                        UserInfoRow(label = "${stringResource(R.string.job)}:", value = uiState.job)
                         HorizontalDivider(
                             modifier = Modifier.padding(vertical = 2.dp),
                             color = Color.LightGray
                         )
-                        UserInfoRow(label = "Gender:", value = uiState.gender)
+                        UserInfoRow(label = stringResource(R.string.gender), value = uiState.gender)
                     }
                 }
             }

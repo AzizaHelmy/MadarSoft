@@ -1,6 +1,5 @@
 package com.example.madarsoft.presentation.screen.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,11 +27,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.madarsoft.R
 import com.example.madarsoft.presentation.navigation.Destination
 import com.example.madarsoft.presentation.navigation.localNavController
 import com.example.madarsoft.presentation.screen.component.AppTextField
@@ -56,15 +57,15 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
             viewModel.resetSuccessState()
         }
     }
-    
+
     if (state.showDialog) {
         AlertDialog(
             onDismissRequest = { viewModel.dismissDialog() },
-            title = { Text("Error") },
+            title = { Text(stringResource(R.string.error)) },
             text = { Text(state.error) },
             confirmButton = {
                 TextButton(onClick = { viewModel.dismissDialog() }) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             }
         )
@@ -96,7 +97,7 @@ fun HomeContent(
 ) {
     Scaffold(topBar = {
         TopAppBar(
-            title = { Text(text = "Add User", color = Color.White) },
+            title = { Text(text = stringResource(R.string.add_user), color = Color.White) },
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Blue)
         )
     }) { paddingValues ->
@@ -116,18 +117,26 @@ fun HomeContent(
                 AppTextField(
                     modifier = Modifier.padding(top = 16.dp),
                     text = uiState.name,
-                    hint = "Name",
+                    hint = stringResource(R.string.name),
                     onValueChange = onNameChanged
                 )
-                AppTextField(text = uiState.title, hint = "Title", onValueChange = onTitleChanged)
+                AppTextField(
+                    text = uiState.title,
+                    hint = stringResource(R.string.title),
+                    onValueChange = onTitleChanged
+                )
                 AppTextField(
                     text = uiState.age.toString(),
-                    hint = "Age",
+                    hint = stringResource(R.string.age),
                     keyboardType = KeyboardType.Number,
                     onValueChange = {
                         onAgeChanged(it.filter { char -> char.isDigit() })
                     })
-                AppTextField(text = uiState.job, hint = "Job", onValueChange = onJobChanged)
+                AppTextField(
+                    text = uiState.job,
+                    hint = stringResource(R.string.job),
+                    onValueChange = onJobChanged
+                )
                 GenderDropDown(
                     selectedGender = uiState.gender,
                     onGenderSelected = onGenderChanged
@@ -135,10 +144,7 @@ fun HomeContent(
 
 
                 Button(
-                    onClick = {
-                        onAddClicked(uiState)
-                        Log.e("TAG", "HomeContent:$uiState ")
-                    },
+                    onClick = { onAddClicked(uiState) },
                     enabled = uiState.isValidData && !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -157,11 +163,10 @@ fun HomeContent(
                             modifier = Modifier.size(24.dp)
                         )
                     } else {
-                        Text(text = "Add")
+                        Text(text = stringResource(R.string.add))
                     }
                 }
             }
-
         }
 
     }
